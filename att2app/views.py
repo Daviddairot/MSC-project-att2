@@ -8,9 +8,6 @@ from .models import Temperatures
 @csrf_exempt  # Allows testing without CSRF token
 @require_http_methods(["POST"])  # Restrict to POST requests
 def add_temperature(request):
-    """
-    A view to add new temperature data into the database.
-    """
     try:
         # Parse the JSON body of the request
         data = json.loads(request.body)
@@ -51,3 +48,36 @@ def add_temperature(request):
     except Exception as e:
         # Handle errors and return failure response
         return JsonResponse({"success": False, "error": str(e)}, status=400)
+
+
+@csrf_exempt
+def sensor_data(request):
+    data = list(Temperatures.objects.values())
+    return JsonResponse({'message': 'Sensor data received successfully', 'data': data}, status=200)
+
+
+@csrf_exempt
+def sensor_data1(request):
+    data = list(Temperatures.objects.values('temperature1', 'humidity1', 'time', 'date'))    
+    return JsonResponse({'message': 'Sensor data received successfully', 'data': data}, status=200)
+
+@csrf_exempt
+def sensor_data2(request):
+    data = list(Temperatures.objects.values('temperature2', 'humidity2', 'time', 'date'))
+    return JsonResponse({'message': 'Sensor data received successfully', 'data': data}, status=200)
+
+
+@csrf_exempt
+def sensor_data3(request):
+    data = list(Temperatures.objects.values('temperature3', 'humidity3', 'time', 'date'))
+    return JsonResponse({'message': 'Sensor data received successfully', 'data': data}, status=200)
+
+@csrf_exempt
+def sensor_data4(request):
+    data = list(Temperatures.objects.values('temperature4', 'humidity4', 'time', 'date'))
+    return JsonResponse({'message': 'Sensor data received successfully', 'data': data}, status=200)
+
+@csrf_exempt
+def sensor_data5(request):
+    data = list(Temperatures.objects.values('temperature5', 'humidity5', 'time', 'date'))
+    return JsonResponse({'message': 'Sensor data received successfully', 'data': data}, status=200)
