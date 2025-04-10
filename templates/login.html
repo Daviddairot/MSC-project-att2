@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{%load static%}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'login.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="loginMain poppins-regular">
+        <div class="loginForm">
+            <h1>Login</h1>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Login</button>
+            </form>
+        </div>
+        {% if form.errors %}
+            <p style="color: red;">Invalid credentials. Please try again.</p>
+        {% endif %}
+        {% if request.GET.next %}
+            <p style="color: green;">You have been logged in successfully.</p>
+        {% endif %}
+    </div>
+
+{% endblock %}

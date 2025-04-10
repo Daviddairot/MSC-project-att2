@@ -4,6 +4,49 @@ from django.utils.dateparse import parse_date, parse_time
 from django.views.decorators.http import require_http_methods
 import json
 from .models import Temperatures
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate
+from .forms import CustomLoginForm
+from django.contrib import messages
+from django.contrib.auth import login as auth_login  # Renamed to avoid conflict
+
+
+def index(request):
+    return render(request, 'index.html')
+
+def room1(request):
+    return render(request, 'room1.html')
+
+def room2(request):
+    return render(request, 'room2.html')
+
+def login(request):
+    if request.method == 'POST':
+        form = CustomLoginForm(request.POST)
+        if form.is_valid():
+            # Get cleaned data from the form
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            
+            # Authenticate the user
+            user = authenticate(request, username=username, password=password)
+
+            if user is not None:
+                # Log the user in (use the renamed login function to avoid conflict)
+                auth_login(request, user)
+                # Redirect to the next URL if provided (useful for redirect after login)
+                next_url = request.GET.get('next', 'index/')
+                return redirect(next_url)
+            else:
+                # Invalid credentials, show an error
+                messages.error(request, "Invalid credentials. Please try again.")
+        else:
+            messages.error(request, "Invalid credentials. Please try again.")
+    else:
+        form = CustomLoginForm()
+
+    return render(request, 'login.html', {'form': form})
+
 
 @csrf_exempt  # Allows testing without CSRF token
 @require_http_methods(["POST"])  # Restrict to POST requests

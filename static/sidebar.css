@@ -1,0 +1,36 @@
+.side-desk{
+    position: fixed !important;
+    height: 100%;
+    left: 0;
+    width: 200px;
+    color: aliceblue;
+    padding-top: 80px;
+    box-shadow: 10px 0 15px rgba(67, 113, 67, 0.2);
+
+}
+li{
+    list-style-type: none;
+    margin-bottom: 10px;
+    place-self: center !important;
+    padding: 10px;
+    border-bottom: 1px solid #fff;
+    width: 100%;
+    z-index: 50;
+}
+a{
+    color: aliceblue;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+}
+
+
+.desk-mobile{
+    z-index: 30px
+}
+
+.btnmeun{
+    z-index: 100;
+}
+
+

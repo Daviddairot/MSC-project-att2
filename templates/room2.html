@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{%load static %}
+
+{% block content %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <div class="chartblock">
+        <div id="chart-container">
+            <canvas id="tempHumidityChart2"></canvas>
+        </div>
+        <div class="chart-controls">
+            <label for="chart-range">State: ON</label><br/>
+            <button class="btn-danger btn-d-setting">On Heater</button>
+        </div>
+    </div>
+    <br/>
+    <script>
+        // Data arrays to hold temperature and humidity data
+        let temperatureData2 = [];
+        let humidityData2 = [];
+        let timeLabels2 = [];
+
+        // Chart.js Configuration
+        const ctx2 = document.getElementById('tempHumidityChart2').getContext('2d');
+        const tempHumidityChart2 = new Chart(ctx2, {
+            type: 'line',
+            data: {
+                labels: timeLabels2,
+                datasets: [
+                    {
+                        label: 'Temperature2 (°C)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        fill: false,
+                        data: temperatureData2,
+                    },
+                    {
+                        label: 'Humidity2 (%)',
+                        borderColor: 'rgb(54, 162, 235)',
+                        fill: false,
+                        data: humidityData2,
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                    }
+                },
+                responsive: true
+            }
+        });
+
+        // AJAX request function to fetch data from the API
+        function fetchData() {
+            $.ajax({
+                url: 'http://127.0.0.1:8000/sensor_data/',
+                method: 'GET',
+                success: function (response) {
+                    // Assuming the response is in the format you've shown
+                    let data = response.data;
+                    
+                    // Extract relevant temperature and humidity data
+                    for (let i = 0; i < data.length; i++) {
+                        let time = data[i].time;
+                        let temp = data[i].temperature2;  // You can choose other sensors too
+                        let humidity = data[i].humidity2;  // Same for humidity
+
+                        console.log(time, humidity, temp);
+
+                        // Append new data to arrays
+                        if (!timeLabels2.includes(time)) {
+                            timeLabels2.push(time);
+                            temperatureData2.push(temp);
+                            humidityData2.push(humidity);
+                        }
+                    }
+
+                    // Update the chart with new data
+                    tempHumidityChart2.update();
+                },
+                error: function () {
+                    console.log('Error fetching data');
+                }
+            });
+        }
+
+        // Fetch data every 5 seconds (5000 milliseconds)
+        setInterval(fetchData, 5000);
+    </script>
+{% endblock %}

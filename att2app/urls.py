@@ -3,6 +3,9 @@ from django.urls import include, path
 from . import views
 
 urlpatterns = [
+    path("", views.login, name="login"),
+    path("index/", views.index, name='index'),
+    path("room2/", views.room2, name = "room2"),
     path("add-temperature/", views.add_temperature, name="add_temperature"),
     path("sensor_data/", views.sensor_data, name="sensor_data"),
     path("sensor_data1/", views.sensor_data1, name="sensor_data1"),
